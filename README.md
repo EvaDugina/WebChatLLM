@@ -1,6 +1,9 @@
-# WebChatLLM — тематический чат с Gemini
+# WebChatLLM — тематический чат c LLM
 
 Небольшое одностраничное веб‑приложение: вход по ключу доступа, чат в рамках заданной темы (system prompt), история сообщений хранится постоянно.
+
+![Login Page](.wiki/screenshots/login.png)
+![Chat Page](.wiki/screenshots/chat.png)
 
 ## Быстрый старт
 
@@ -46,3 +49,4 @@ docker compose -f docker-compose.prod.yml down
 - Ротация/инвалидация токенов, rate limiting, аудит логов
 - Миграции БД (Alembic) и индексы/поиск по истории
 - UI: темы, markdown‑рендер, подсветка кода, управление историей
+
