@@ -28,3 +28,9 @@ class SendMessageOut(BaseModel):
     user: MessageOut
     assistant: MessageOut
 
+
+class ModelInfoOut(BaseModel):
+    provider: str
+    model_id: str
+    url: str
+

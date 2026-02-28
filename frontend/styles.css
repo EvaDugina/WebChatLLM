@@ -48,6 +48,18 @@ body {
   letter-spacing: 0.2px;
 }
 
+.header__model {
+  margin-top: 4px;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.header__model a {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-style: dotted;
+}
+
 .main { flex: 1; }
 
 .card {

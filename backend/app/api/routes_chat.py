@@ -3,7 +3,7 @@ from __future__ import annotations
 from fastapi import APIRouter, Depends, HTTPException
 
 from app.core.config import settings
-from app.models.message import MessageOut, SendMessageIn, SendMessageOut
+from app.models.message import MessageOut, ModelInfoOut, SendMessageIn, SendMessageOut
 from app.services.llm.base import ChatLLM
 from app.services.llm.gemini import GeminiChatService
 from app.services.llm.openrouter_client import OpenRouterChatService
@@ -38,6 +38,20 @@ def get_llm() -> ChatLLM:
             system_prompt=settings.system_prompt,
         )
     raise HTTPException(status_code=500, detail="unsupported_llm_provider")
+
+
+@router.get("/model", response_model=ModelInfoOut)
+def get_model_info() -> ModelInfoOut:
+    provider = (settings.llm_provider or "gemini").lower()
+    if provider == "openrouter":
+        model_id = settings.openrouter_model
+        url = f"https://openrouter.ai/{model_id}/api"
+        return ModelInfoOut(provider="openrouter", model_id=model_id, url=url)
+
+    # default: gemini
+    model_id = settings.gemini_model
+    url = f"https://ai.google.dev/gemini-api/docs/models/{model_id}"
+    return ModelInfoOut(provider="gemini", model_id=model_id, url=url)
 
 
 @router.get("/messages", response_model=list[MessageOut])

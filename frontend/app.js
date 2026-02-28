@@ -72,6 +72,20 @@ function renderMessages(container, items) {
   container.scrollTop = container.scrollHeight;
 }
 
+async function initModelInfo() {
+  const el = document.getElementById("modelInfo");
+  if (!el) return;
+  try {
+    const res = await fetch("/api/model");
+    if (!res.ok) return;
+    const data = await res.json();
+    if (!data || !data.url || !data.model_id) return;
+    el.innerHTML = `<a href="${data.url}" target="_blank" rel="noreferrer">${data.model_id}</a>`;
+  } catch (_) {
+    // тихо игнорируем ошибку, это только декоративная информация
+  }
+}
+
 async function bootstrap() {
   const loginView = qs("loginView");
   const chatView = qs("chatView");
@@ -215,6 +229,8 @@ async function bootstrap() {
       setAuthed(false);
     }
   }
+
+  initModelInfo();
 }
 
 bootstrap();
