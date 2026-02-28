@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Тематический чат</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="app">
+      <header class="header">
+        <div class="header__title">Тематический чат с Arcee AI</div>
+        <button id="logoutBtn" class="btn btn--ghost hidden" type="button">Выйти</button>
+      </header>
+
+      <main class="main">
+        <section id="loginView" class="card">
+          <h1 class="h1">Вход по ключу доступа</h1>
+          <p class="muted">Ключ задаётся на сервере. Введите его, чтобы открыть чат.</p>
+
+          <label class="label" for="accessKeyInput">Ключ доступа</label>
+          <input
+            id="accessKeyInput"
+            class="input"
+            type="password"
+            autocomplete="off"
+            spellcheck="false"
+            placeholder="например, ABCD_1234"
+          />
+          <div id="loginError" class="error hidden"></div>
+
+          <button id="loginBtn" class="btn" type="button" disabled>Войти</button>
+          <div class="hint">
+            Допустимые символы: латиница, цифры, <code>-</code>, <code>_</code>. Длина 8–255.
+          </div>
+        </section>
+
+        <section id="chatView" class="chat hidden">
+          <div id="messages" class="messages"></div>
+
+          <form id="sendForm" class="composer">
+            <textarea
+              id="messageInput"
+              class="textarea"
+              rows="2"
+              placeholder="Напишите сообщение…"
+              maxlength="500"
+            ></textarea>
+            <button id="sendBtn" class="btn" type="submit" disabled>Отправить</button>
+          </form>
+          <div id="chatError" class="error hidden"></div>
+        </section>
+      </main>
+
+      <footer class="footer muted">
+        История хранится на сервере и сохраняется между перезапусками.
+      </footer>
+    </div>
+
+    <script src="./app.js"></script>
+  </body>
+</html>
+
