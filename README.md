@@ -2,28 +2,31 @@
 
 Небольшое одностраничное веб‑приложение: вход по ключу доступа, чат в рамках заданной темы (system prompt), история сообщений хранится постоянно.
 
-## Быстрый старт (3–5 команд)
+## Быстрый старт
 
-1) Установите Docker Desktop и включите запуск Linux containers.
+1) Установите Docker:
 
-2) Создайте `.env`:
+   - **Linux:**  
+     ```bash
+     curl -fsSL https://get.docker.com | sudo sh
+     ```
+
+   - **Windows / Mac:**  
+     Скачайте и установите [Docker Desktop](https://www.docker.com/products/docker-desktop/)
+
+2) Убедитесь, что в `.env` заданы правильные значения
+
+3) Соберите и поднимите prod‑окружение:
 
 ```bash
-copy .env.example .env
+docker compose -f docker-compose.prod.yml up --build -d
 ```
 
-3) Запуск в dev:
+4) Откройте: `http://localhost:8080` (или хост/порт, проброшенные в compose).
+5) Остановка:
 
 ```bash
-docker compose -f docker-compose.dev.yml up --build
-```
-
-Откройте: `http://localhost:8080`
-
-4) Остановка:
-
-```bash
-docker compose -f docker-compose.dev.yml down
+docker compose -f docker-compose.prod.yml down
 ```
 
 ## Устройство проекта (кратко)

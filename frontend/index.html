@@ -4,6 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Тематический чат</title>
+    <link rel="icon" href="https://fav.farm/%F0%9F%92%AC" />
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
@@ -13,7 +14,10 @@
           <div class="header__title">Тематический чат с Arcee AI</div>
           <div id="modelInfo" class="header__model"></div>
         </div>
-        <button id="logoutBtn" class="btn btn--ghost hidden" type="button">Выйти</button>
+        <div>
+          <button id="themeToggle" class="btn btn--ghost" type="button">Темная тема</button>
+          <button id="logoutBtn" class="btn btn--ghost hidden" type="button">Выйти</button>
+        </div>
       </header>
 
       <main class="main">
@@ -51,6 +55,7 @@
             ></textarea>
             <button id="sendBtn" class="btn" type="submit" disabled>Отправить</button>
           </form>
+          <div id="chatStatus" class="muted"></div>
           <div id="chatError" class="error hidden"></div>
         </section>
       </main>

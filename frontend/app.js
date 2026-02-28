@@ -1,5 +1,6 @@
 const ACCESS_KEY_RE = /^[A-Za-z0-9_-]{8,255}$/;
 const TOKEN_KEY = "chat_token";
+const THEME_KEY = "chat_theme";
 
 function qs(id) {
   return document.getElementById(id);
@@ -53,6 +54,14 @@ async function api(path, { method = "GET", body = undefined } = {}) {
 
 function renderMessages(container, items) {
   container.innerHTML = "";
+  if (!items || items.length === 0) {
+    const empty = document.createElement("div");
+    empty.className = "messages-empty";
+    empty.textContent = "История пока пуста — начните диалог.";
+    container.appendChild(empty);
+    return;
+  }
+
   for (const m of items) {
     const row = document.createElement("div");
     row.className = `msg ${m.role === "user" ? "msg--user" : "msg--assistant"}`;
@@ -90,6 +99,7 @@ async function bootstrap() {
   const loginView = qs("loginView");
   const chatView = qs("chatView");
   const logoutBtn = qs("logoutBtn");
+  const themeToggle = qs("themeToggle");
 
   const accessKeyInput = qs("accessKeyInput");
   const loginBtn = qs("loginBtn");
@@ -100,6 +110,25 @@ async function bootstrap() {
   const messageInput = qs("messageInput");
   const sendBtn = qs("sendBtn");
   const chatError = qs("chatError");
+  const chatStatus = qs("chatStatus");
+
+  function setChatStatus(msg) {
+    if (!chatStatus) return;
+    chatStatus.textContent = msg || "";
+  }
+
+  function applyTheme(theme) {
+    const t = theme === "light" ? "light" : "dark";
+    if (t === "light") {
+      document.body.classList.add("theme-light");
+    } else {
+      document.body.classList.remove("theme-light");
+    }
+    localStorage.setItem(THEME_KEY, t);
+    if (themeToggle) {
+      themeToggle.textContent = t === "light" ? "Ночная тема" : "Дневная тема";
+    }
+  }
 
   function setAuthed(isAuthed) {
     if (isAuthed) {
@@ -130,6 +159,14 @@ async function bootstrap() {
   accessKeyInput.addEventListener("input", () => {
     validateKey();
   });
+
+  if (themeToggle) {
+    themeToggle.addEventListener("click", () => {
+      const current = localStorage.getItem(THEME_KEY) || "dark";
+      const next = current === "light" ? "dark" : "light";
+      applyTheme(next);
+    });
+  }
 
   loginBtn.addEventListener("click", async () => {
     setError(loginError, "");
@@ -165,6 +202,7 @@ async function bootstrap() {
   async function loadHistory() {
     setError(chatError, "");
     try {
+      setChatStatus("Загружаем историю…");
       const items = await api("/messages");
       renderMessages(messagesEl, items);
     } catch (e) {
@@ -175,6 +213,8 @@ async function bootstrap() {
         return;
       }
       setError(chatError, "Не удалось загрузить историю.");
+    } finally {
+      setChatStatus("");
     }
   }
 
@@ -189,6 +229,7 @@ async function bootstrap() {
     sending = true;
     sendBtn.disabled = true;
     messageInput.disabled = true;
+    setChatStatus("Модель думает…");
     try {
       const out = await api("/messages", { method: "POST", body: { text } });
       messageInput.value = "";
@@ -211,6 +252,7 @@ async function bootstrap() {
       messageInput.disabled = false;
       validateMessage();
       messageInput.focus();
+      setChatStatus("");
     }
   });
 
@@ -218,6 +260,7 @@ async function bootstrap() {
   setAuthed(false);
   validateKey();
   validateMessage();
+  applyTheme(localStorage.getItem(THEME_KEY) || "dark");
   const token = sessionStorage.getItem(TOKEN_KEY);
   if (token) {
     try {
